@@ -2385,71 +2385,76 @@ body.menu-open-scroll-lock {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 1.15rem;
 }
 
 .sm-panel-item {
   position: relative;
   color: #ffffff;
   font-weight: 800;
-  font-family: var(--font-display), sans-serif;
+  font-family: var(--font-body), sans-serif;
   font-size: clamp(2.2rem, 3.8vw, 3.2rem);
   cursor: pointer;
-  line-height: 1.05;
-  letter-spacing: -1.5px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
   text-transform: uppercase;
   transition: color 0.25s ease, transform 0.25s ease;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
   text-decoration: none;
-  padding-right: 1.6em;
-}
-
-.staggered-menu-panel .sm-socials-list .sm-socials-link {
-  opacity: 1;
-  transition: opacity 0.3s ease;
-}
-
-.staggered-menu-panel .sm-socials-list:hover .sm-socials-link:not(:hover) {
-  opacity: 0.35;
-}
-
-.staggered-menu-panel .sm-socials-list:focus-within .sm-socials-link:not(:focus-visible) {
-  opacity: 0.35;
-}
-
-.staggered-menu-panel .sm-socials-list .sm-socials-link:hover,
-.staggered-menu-panel .sm-socials-list .sm-socials-link:focus-visible {
-  opacity: 1;
-}
-
-.sm-panel-itemLabel {
-  display: inline-block;
-  will-change: transform;
-  transform-origin: 50% 100%;
+  padding: 0.2rem 0;
 }
 
 .sm-panel-item:hover {
   color: var(--color-lime);
 }
 
-.sm-panel-list[data-numbering] {
-  counter-reset: smItem;
+.sm-panel-item.active {
+  color: #ffffff;
 }
 
-.sm-panel-list[data-numbering] .sm-panel-item::after {
-  counter-increment: smItem;
-  content: counter(smItem, decimal-leading-zero);
+.sm-panel-itemLabel {
+  position: relative;
+  display: inline-block;
+  will-change: transform;
+  transform-origin: 50% 100%;
+}
+
+/* Authentic Cyber-Lime Marker Doodle Encircle */
+.sm-doodle-oval {
   position: absolute;
-  top: 0.12em;
-  right: 0.2em;
-  font-size: 15px;
-  font-weight: 700;
-  font-family: var(--font-mono);
-  color: var(--color-lime);
-  letter-spacing: 0;
+  top: 50%;
+  left: 50%;
+  width: calc(100% + 42px);
+  height: calc(100% + 26px);
+  transform: translate(-50%, -50%) rotate(-2deg);
   pointer-events: none;
-  user-select: none;
-  opacity: var(--sm-num-opacity, 0);
+  opacity: 0;
+  visibility: hidden;
+  overflow: visible;
+  z-index: 3;
+  transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sm-doodle-oval path {
+  stroke: var(--color-lime);
+  stroke-width: 4.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  transition: stroke-dashoffset 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 0 6px rgba(212, 255, 0, 0.4));
+}
+
+.sm-panel-item.active .sm-doodle-oval {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) rotate(-1.5deg) scale(1);
+}
+
+.sm-panel-item.active .sm-doodle-oval path {
+  stroke-dashoffset: 0;
 }
 
 @media (max-width: 1024px) {

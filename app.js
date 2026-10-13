@@ -83,6 +83,11 @@ function goToSlide(index) {
       link.classList.toggle('active', i === currentSlideIndex);
     });
 
+    // Update Side Nav Doodle Encircle
+    if (typeof updateSideNavActiveFromSlide === 'function') {
+      updateSideNavActiveFromSlide(currentSlideIndex);
+    }
+
     playTacticalBlip(980, 0.05, 'triangle');
   }
 }
@@ -648,6 +653,51 @@ function handleSwipe() {
   }
 }
 
+// ============================================================================
+// SIDE NAV DOODLE ENCIRCLE ACTIVE INDICATOR
+// ============================================================================
+const slideToSectionMap = {
+  0: 'about',
+  1: 'about',
+  2: 'about',
+  3: 'recruit',
+  4: 'works',
+  5: 'service',
+  6: 'works',
+  7: 'contact'
+};
+
+function updateSideNavActive(sectionKey) {
+  const panel = document.getElementById('staggered-menu-panel');
+  if (!panel) return;
+  const items = panel.querySelectorAll('.sm-panel-item');
+  items.forEach(item => {
+    const isCurrent = item.getAttribute('data-section') === sectionKey;
+    if (isCurrent) {
+      if (!item.classList.contains('active')) {
+        item.classList.add('active');
+        const path = item.querySelector('.sm-doodle-oval path');
+        if (path) {
+          path.style.strokeDashoffset = '600';
+          void path.getBoundingClientRect();
+          path.style.strokeDashoffset = '0';
+        }
+      }
+    } else {
+      item.classList.remove('active');
+      const path = item.querySelector('.sm-doodle-oval path');
+      if (path) {
+        path.style.strokeDashoffset = '600';
+      }
+    }
+  });
+}
+
+function updateSideNavActiveFromSlide(slideIdx) {
+  const sectionKey = slideToSectionMap[slideIdx] || 'about';
+  updateSideNavActive(sectionKey);
+}
+
 // Scroll Progress Spy for Scroll Mode
 function updateScrollSpy() {
   if (!isScrollMode) return;
@@ -662,6 +712,9 @@ function updateScrollSpy() {
       navLinks.forEach((link, i) => {
         link.classList.toggle('active', i === idx);
       });
+
+      // Update Side Nav Active Doodle
+      updateSideNavActiveFromSlide(idx);
     }
   });
 }
@@ -994,6 +1047,9 @@ function initStaggeredMenu({
     if (target) {
       document.documentElement.classList.add('menu-open-scroll-lock');
       document.body.classList.add('menu-open-scroll-lock');
+      if (typeof updateSideNavActiveFromSlide === 'function') {
+        updateSideNavActiveFromSlide(currentSlideIndex);
+      }
       playOpen();
     } else {
       document.documentElement.classList.remove('menu-open-scroll-lock');
@@ -1036,7 +1092,13 @@ function initStaggeredMenu({
   panel.querySelectorAll('.sm-panel-item').forEach(item => {
     item.addEventListener('click', (e) => {
       const href = item.getAttribute('href');
-      const idx = item.getAttribute('data-index');
+      const slideIdx = item.getAttribute('data-slide');
+      const sectionKey = item.getAttribute('data-section');
+
+      if (sectionKey && typeof updateSideNavActive === 'function') {
+        updateSideNavActive(sectionKey);
+      }
+
       if (href && href.startsWith('#')) {
         e.preventDefault();
         closeMenu();
@@ -1047,11 +1109,8 @@ function initStaggeredMenu({
           }
         } else {
           // Slide deck presentation mode
-          if (idx && typeof goToSlide === 'function') {
-            const slideNum = parseInt(idx, 10);
-            const slideMap = [0, 1, 2, 2, 3, 4, 5, 6, 7];
-            const targetSlide = slideMap[slideNum - 1] ?? (slideNum - 1);
-            goToSlide(targetSlide);
+          if (slideIdx && typeof goToSlide === 'function') {
+            goToSlide(parseInt(slideIdx, 10));
           }
         }
       }

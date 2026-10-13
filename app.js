@@ -1110,7 +1110,7 @@ function initStaggeredMenu({
     });
   }
 
-  // Handle Menu link clicks with smooth scroll & auto close
+  // Handle Menu link clicks with smooth scroll & reliable page redirection
   panel.querySelectorAll('.sm-panel-item').forEach(item => {
     item.addEventListener('click', (e) => {
       const href = item.getAttribute('href');
@@ -1122,27 +1122,51 @@ function initStaggeredMenu({
         updateSideNavActive(sectionKey);
       }
 
+      if (!href) return;
+
       const isIndex = currentPath === 'index.html' || currentPath === '' || currentPath.endsWith('/');
 
-      // If we are on index.html and clicking COVER or an anchor on index.html
-      if (isIndex && href && (href.startsWith('#') || href.startsWith('index.html#'))) {
-        const hash = href.includes('#') ? '#' + href.split('#')[1] : href;
+      // Case 1: Clicking COVER while on index.html
+      if (isIndex && (href === 'index.html#scroll-sec-0' || href === '#scroll-sec-0' || href === 'index.html')) {
+        e.preventDefault();
+        closeMenu();
+        const targetElement = document.getElementById('scroll-sec-0');
+        if (targetElement) {
+          if (document.body.classList.contains('mode-scroll')) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            if (typeof goToSlide === 'function') {
+              goToSlide(0);
+            }
+          }
+        }
+        return;
+      }
+
+      // Case 2: Target is a separate page (about.html, works.html, service.html, recruit.html, contact.html)
+      // or redirecting back to index.html from another page
+      const targetBase = href.split('#')[0];
+      if (targetBase && targetBase !== currentPath) {
+        e.preventDefault();
+        closeMenu();
+        // Reliable direct navigation
+        window.location.href = href;
+        return;
+      }
+
+      // Case 3: In-page anchor hash scroll
+      if (href.includes('#')) {
+        const hash = '#' + href.split('#')[1];
         const targetElement = document.querySelector(hash);
         if (targetElement) {
           e.preventDefault();
           closeMenu();
-          if (document.body.classList.contains('mode-scroll')) {
-            targetElement.scrollIntoView({ behavior: 'smooth' });
-          } else {
-            if (slideIdx && typeof goToSlide === 'function') {
-              goToSlide(parseInt(slideIdx, 10));
-            }
-          }
+          targetElement.scrollIntoView({ behavior: 'smooth' });
           return;
         }
       }
 
-      // For standard page transitions, simply close menu and allow navigation
+      // Case 4: Same page link click
       closeMenu();
     });
   });

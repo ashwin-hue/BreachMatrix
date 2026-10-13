@@ -657,8 +657,8 @@ function handleSwipe() {
 // SIDE NAV DOODLE ENCIRCLE ACTIVE INDICATOR
 // ============================================================================
 const slideToSectionMap = {
-  0: 'about',
-  1: 'about',
+  0: 'cover',
+  1: 'cover',
   2: 'about',
   3: 'recruit',
   4: 'works',
@@ -694,8 +694,25 @@ function updateSideNavActive(sectionKey) {
 }
 
 function updateSideNavActiveFromSlide(slideIdx) {
-  const sectionKey = slideToSectionMap[slideIdx] || 'about';
+  const sectionKey = slideToSectionMap[slideIdx] || 'cover';
   updateSideNavActive(sectionKey);
+}
+
+function initPageActiveItem() {
+  const currentPath = window.location.pathname.split('/').pop().toLowerCase() || 'index.html';
+  if (currentPath.includes('about')) {
+    updateSideNavActive('about');
+  } else if (currentPath.includes('works')) {
+    updateSideNavActive('works');
+  } else if (currentPath.includes('service')) {
+    updateSideNavActive('service');
+  } else if (currentPath.includes('recruit')) {
+    updateSideNavActive('recruit');
+  } else if (currentPath.includes('contact')) {
+    updateSideNavActive('contact');
+  } else {
+    updateSideNavActiveFromSlide(currentSlideIndex);
+  }
 }
 
 // Scroll Progress Spy for Scroll Mode
@@ -704,6 +721,8 @@ function updateScrollSpy() {
 
   // Active Nav Link Spy
   const sections = document.querySelectorAll('.scroll-section');
+  if (!sections.length) return;
+
   sections.forEach((sec, idx) => {
     const rect = sec.getBoundingClientRect();
     if (rect.top <= window.innerHeight * 0.45 && rect.bottom >= window.innerHeight * 0.15) {
@@ -751,8 +770,11 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('mouseenter', () => playTacticalBlip(540, 0.03, 'sine'));
   });
 
-  // Initialize scroll spy on load
+  // Initialize scroll spy and page active item on load
   updateScrollSpy();
+  if (typeof initPageActiveItem === 'function') {
+    initPageActiveItem();
+  }
 
   // Initialize GSAP Staggered Side Nav Bar
   initStaggeredMenu({
@@ -1047,8 +1069,8 @@ function initStaggeredMenu({
     if (target) {
       document.documentElement.classList.add('menu-open-scroll-lock');
       document.body.classList.add('menu-open-scroll-lock');
-      if (typeof updateSideNavActiveFromSlide === 'function') {
-        updateSideNavActiveFromSlide(currentSlideIndex);
+      if (typeof initPageActiveItem === 'function') {
+        initPageActiveItem();
       }
       playOpen();
     } else {
@@ -1094,26 +1116,34 @@ function initStaggeredMenu({
       const href = item.getAttribute('href');
       const slideIdx = item.getAttribute('data-slide');
       const sectionKey = item.getAttribute('data-section');
+      const currentPath = window.location.pathname.split('/').pop().toLowerCase() || 'index.html';
 
       if (sectionKey && typeof updateSideNavActive === 'function') {
         updateSideNavActive(sectionKey);
       }
 
-      if (href && href.startsWith('#')) {
-        e.preventDefault();
-        closeMenu();
-        if (document.body.classList.contains('mode-scroll')) {
-          const targetElement = document.querySelector(href);
-          if (targetElement) {
+      const isIndex = currentPath === 'index.html' || currentPath === '' || currentPath.endsWith('/');
+
+      // If we are on index.html and clicking COVER or an anchor on index.html
+      if (isIndex && href && (href.startsWith('#') || href.startsWith('index.html#'))) {
+        const hash = href.includes('#') ? '#' + href.split('#')[1] : href;
+        const targetElement = document.querySelector(hash);
+        if (targetElement) {
+          e.preventDefault();
+          closeMenu();
+          if (document.body.classList.contains('mode-scroll')) {
             targetElement.scrollIntoView({ behavior: 'smooth' });
+          } else {
+            if (slideIdx && typeof goToSlide === 'function') {
+              goToSlide(parseInt(slideIdx, 10));
+            }
           }
-        } else {
-          // Slide deck presentation mode
-          if (slideIdx && typeof goToSlide === 'function') {
-            goToSlide(parseInt(slideIdx, 10));
-          }
+          return;
         }
       }
+
+      // For standard page transitions, simply close menu and allow navigation
+      closeMenu();
     });
   });
 

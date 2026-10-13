@@ -2198,8 +2198,9 @@ body.chat-drawer-open .staggered-menu-wrapper.fixed-wrapper {
 
 .sm-panel-itemWrap {
   position: relative;
-  overflow: hidden;
-  line-height: 1;
+  overflow: visible !important;
+  line-height: 1.1;
+  padding: 0.25rem 0.6rem;
 }
 
 .sm-icon-line {
@@ -2425,13 +2426,13 @@ body.menu-open-scroll-lock {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: calc(100% + 42px);
-  height: calc(100% + 26px);
-  transform: translate(-50%, -50%) rotate(-2deg);
+  width: calc(100% + 64px);
+  height: calc(100% + 36px);
+  transform: translate(-50%, -50%) rotate(-1.5deg);
   pointer-events: none;
   opacity: 0;
   visibility: hidden;
-  overflow: visible;
+  overflow: visible !important;
   z-index: 3;
   transition: opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -2441,10 +2442,10 @@ body.menu-open-scroll-lock {
   stroke-width: 4.5;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 600;
-  stroke-dashoffset: 600;
+  stroke-dasharray: 1100;
+  stroke-dashoffset: 1100;
   transition: stroke-dashoffset 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  filter: drop-shadow(0 0 6px rgba(212, 255, 0, 0.4));
+  filter: drop-shadow(0 0 6px rgba(212, 255, 0, 0.45));
 }
 
 .sm-panel-item.active .sm-doodle-oval {

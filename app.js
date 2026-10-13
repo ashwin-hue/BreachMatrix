@@ -678,7 +678,7 @@ function updateSideNavActive(sectionKey) {
         item.classList.add('active');
         const path = item.querySelector('.sm-doodle-oval path');
         if (path) {
-          path.style.strokeDashoffset = '600';
+          path.style.strokeDashoffset = '1100';
           void path.getBoundingClientRect();
           path.style.strokeDashoffset = '0';
         }
@@ -687,7 +687,7 @@ function updateSideNavActive(sectionKey) {
       item.classList.remove('active');
       const path = item.querySelector('.sm-doodle-oval path');
       if (path) {
-        path.style.strokeDashoffset = '600';
+        path.style.strokeDashoffset = '1100';
       }
     }
   });

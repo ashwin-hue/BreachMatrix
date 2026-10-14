@@ -766,7 +766,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Interactive UI buttons sound effect on hover
-  document.querySelectorAll('button, .index-item-card, .nav-link').forEach(el => {
+  document.querySelectorAll('button, .index-item-card, .nav-link, .hero-scroll-trigger, .hero-breadcrumb-home').forEach(el => {
     el.addEventListener('mouseenter', () => playTacticalBlip(540, 0.03, 'sine'));
   });
 

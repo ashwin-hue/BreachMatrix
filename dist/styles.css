@@ -4,7 +4,7 @@
    Inspired by: Business Portfolio Template Design
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Saira+Condensed:wght@700;800;900&family=Saira:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@700;800;900&family=Saira+Condensed:wght@700;800;900&family=Saira:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
   /* Brand Color Tokens */
@@ -2487,3 +2487,112 @@ body.menu-open-scroll-lock {
     font-size: 2.2rem;
   }
 }
+
+/* ==========================================================================
+   PAGE HERO SECTIONS (BreachMatrix Cyber-Editorial Brutalist Centered Hero)
+   ========================================================================== */
+.page-hero-section {
+  width: 100%;
+  min-height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-color: #0a0a0c;
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(212, 255, 0, 0.08) 0%, transparent 68%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  background-position: center, -1px -1px, -1px -1px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 5rem 2rem;
+  box-sizing: border-box;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Subtle corner crosshairs */
+.page-hero-crosshair {
+  position: absolute;
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: rgba(212, 255, 0, 0.4);
+  pointer-events: none;
+  user-select: none;
+  line-height: 1;
+}
+.page-hero-crosshair.tl { top: 1.5rem; left: 1.75rem; }
+.page-hero-crosshair.tr { top: 1.5rem; right: 5.5rem; }
+.page-hero-crosshair.bl { bottom: 1.5rem; left: 1.75rem; }
+.page-hero-crosshair.br { bottom: 1.5rem; right: 2rem; }
+
+/* Center content block */
+.page-hero-center-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-hero-subtag {
+  font-family: var(--font-mono);
+  font-size: clamp(0.75rem, 1.2vw, 0.95rem);
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--color-lime);
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+  display: inline-block;
+  opacity: 0.95;
+}
+
+.page-hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(4.8rem, 15vw, 12.5rem);
+  font-weight: 900;
+  line-height: 0.88;
+  letter-spacing: 0.015em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  user-select: none;
+  display: block;
+  text-shadow: 0 4px 35px rgba(0, 0, 0, 0.9);
+}
+
+.page-hero-lime-bar {
+  width: 72px;
+  height: 5px;
+  background-color: var(--color-lime-solid-bar);
+  margin: 1.75rem auto 0;
+  box-shadow: 0 0 16px var(--color-lime-glow);
+}
+
+@media (max-width: 768px) {
+  .page-hero-section {
+    min-height: 55vh;
+    padding: 4rem 1.25rem;
+  }
+  .page-hero-title {
+    font-size: clamp(3.4rem, 15vw, 6.2rem);
+    line-height: 0.92;
+  }
+  .page-hero-lime-bar {
+    width: 50px;
+    height: 4px;
+    margin-top: 1.25rem;
+  }
+  .page-hero-crosshair.tr {
+    right: 4.5rem;
+  }
+}
+
